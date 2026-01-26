@@ -1,0 +1,15 @@
+title = "Custom Gitleaks Configuration"
+
+[[rules]]
+id = "exclude-k8s-secrets"
+description = "Exclude k8s secrets file"
+regex = '''k8s/secrets\.yml'''
+tags = ["exclude"]
+paths = ["k8s/secrets.yml"]
+
+[[rules]]
+id = "exclude-docker-compose"
+description = "Exclude docker-compose.yml"
+regex = '''docker-compose\.yml'''
+tags = ["exclude"]
+paths = ["docker-compose.yml"]
