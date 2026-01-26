@@ -28,26 +28,23 @@ jobs:
           cd backend
           find . -name "*.js" -exec node --check {} +
 
-  gitleaks-scan:
+  trivy_fs_scanning:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: checkout-code
         uses: actions/checkout@v4
-
-      - name: Gitleaks Setup
-        uses: gitleaks/gitleaks-action@v2
-
-      - name: Gitleaks Scan
-        run: |
-          gitleaks detect --source ./frontend --no-git \
-          --ignore-path .gitleaksignore \
-          --exit-code 1 \
-          --config-path .gitleaks.toml  # Add config file
-          gitleaks detect --source ./backend --no-git \
-          --ignore-path .gitleaksignore \
-          --exit-code 1 \
-          --config-path .gitleaks.toml
-
+      - name: trivy scanning
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+            scan-type: 'fs'
+            scan-ref: '.'   # path which we want to scan
+            format: 'table'  # result in table format
+            ignore-infixed: true
+            vuln-type: 'os, library'
+            severity: 'CRITICAL, HIGH'
+            
+        
+  
 
 
 
