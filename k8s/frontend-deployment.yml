@@ -1,60 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: frontend-deployment
   namespace: chat-app
 spec:
   selector:
     matchLabels:
-      app: backend
+      app: frontend
   template:
     metadata:
-      name: backend-pod
+      name: frontend-pod
       namespace: chat-app
       labels:
-        app: backend
+        app: frontend
     spec:
-      tolerations:
-      - key: "prod"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                - tws-cluster-worker  
       containers:
-      - name: chatapp-backend
-        image: shantaveerkhyalap/backend:27be5ada48638ff7b6f4692b6e9130ea0a86b913
+      - name: chatapp-frontend
+        image: shantaveerkhyalap/frontend:5992e39ad0eb858025bd14f0d12be709760a5003
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5001
+        - containerPort: 80
         env:
         - name: NODE_ENV
           value: production
-        - name: MONGODB_URI
-          value: "mongodb://mongoadmin:secret@mongodb:27017/dbname?authSource=admin"
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: chatapp-secrets
-              key: jwt
-        - name: PORT
-          value: "5001"
-        # Use TCP probe since we know port 5001 is listening
-        readinessProbe:
-          tcpSocket:
-            port: 5001
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          successThreshold: 1
-          failureThreshold: 3
