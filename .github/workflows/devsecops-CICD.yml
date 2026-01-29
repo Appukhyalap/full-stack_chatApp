@@ -189,15 +189,15 @@ jobs:
       env:
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        FRONTEND_IMAGE="shantaveerkhyalap/chatapp-frontend:${IMAGE_TAG}"
-        BACKEND_IMAGE="shantaveerkhyalap/chatapp-backend:${IMAGE_TAG}"
+        FRONTEND_IMAGE="shantaveerkhyalap/frontend:${IMAGE_TAG}"
+        BACKEND_IMAGE="shantaveerkhyalap/backend:${IMAGE_TAG}"
 
         echo "Updating frontend image → ${FRONTEND_IMAGE}"
-        sed -i "s|image: shantaveerkhyalap/chatapp-frontend:.*|image: ${FRONTEND_IMAGE}|g" \
+        sed -i "s|image: shantaveerkhyalap/frontend:.*|image: ${FRONTEND_IMAGE}|g" \
           k8s/frontend-deployment.yml
 
         echo "Updating backend image → ${BACKEND_IMAGE}"
-        sed -i "s|image: shantaveerkhyalap/chatapp-backend:.*|image: ${BACKEND_IMAGE}|g" \
+        sed -i "s|image: shantaveerkhyalap/backend:.*|image: ${BACKEND_IMAGE}|g" \
           k8s/backend-deployment.yml
 
         echo "Updated images:"
