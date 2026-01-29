@@ -14,9 +14,18 @@ spec:
       labels:
         app: backend
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - tws-cluster-worker  
       containers:
       - name: chatapp-backend
-        image: shantaveerkhyalap/backend:5c6140541aea94e5eb1c1284315e8cc123255a78
+        image: shantaveerkhyalap/backend:06893d485fd06a45a8797e584c974c6f42f523e8
         resources:
           limits:
             memory: "128Mi"
@@ -27,7 +36,7 @@ spec:
         - name: NODE_ENV
           value: production
         - name: MONGODB_URI
-          value: "mongodb://mongoadmin:secret@mongodb:27017/dbname?authSource=admin" #in this mongodb is the service name for mongodb deployment
+          value: "mongodb://mongoadmin:secret@mongodb:27017/dbname?authSource=admin"
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -35,5 +44,3 @@ spec:
               key: jwt
         - name: PORT
           value: "5001"
-
-
